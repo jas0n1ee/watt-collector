@@ -1,0 +1,50 @@
+services:
+  mqtt-collector:
+    build: .
+    image: mqtt-collector:latest
+    container_name: electric-meter-collector
+    restart: unless-stopped
+    
+    # 环境变量
+    environment:
+      - TZ=Asia/Shanghai
+    
+    # 挂载数据卷
+    volumes:
+      # 数据持久化到主机目录
+      - ./data:/app/.data
+      # 或指定绝对路径
+      # - /var/lib/meter_data:/app/.data
+    
+    # 命令行参数
+    command:
+      - --interval
+      - "60"              # 采集间隔（秒）
+      - --host
+      - "10.0.0.10"       # MQTT Broker IP
+      - --port
+      - "1883"            # MQTT 端口
+      - --data-dir
+      - "/app/.data"      # 容器内数据目录
+      # 自动寻址模式（默认）：启动时自动广播读取表号
+      # 如需固定地址，取消下面两行的注释：
+      # - --addr
+      # - "11 22 33 44 55 66"
+    
+    # 网络配置（如需访问宿主机 MQTT，使用 host 网络）
+    # network_mode: host
+    
+    # 或使用桥接网络
+    networks:
+      - meter-network
+    
+    # 日志配置
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  meter-network:
+    driver: bridge
