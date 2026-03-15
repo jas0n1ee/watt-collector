@@ -53,7 +53,12 @@ _stop = False
 
 # 跨进程间隔锁
 LOCK_FILE = "/tmp/mqtt_collector.lock"
-MIN_SEND_INTERVAL = 1.0
+MIN_SEND_INTERVAL = 5.0
+
+# 时区设置：如果设置了 TZ 环境变量，应用时区
+if 'TZ' in os.environ:
+    time.tzset()
+    print(f"[时区] 使用环境变量 TZ={os.environ['TZ']}")
 
 
 def _handle_signal(signum, frame):
