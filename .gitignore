@@ -5,13 +5,18 @@ __pycache__/
 *.so
 .Python
 venv/
-env/
-ENV/
+.venv/
+*.egg-info/
+dist/
+build/
 
-# Data files (local test data)
-.data/
-data/
-*.csv
+# 数据文件（包含敏感信息：电表地址、电量数据）
+.data/*.csv
+!.data/README.md
+
+# 环境配置（可能包含敏感信息）
+.env
+.env.local
 
 # IDE
 .vscode/
@@ -23,7 +28,6 @@ data/
 .DS_Store
 Thumbs.db
 
-# Logs
+# 日志
 *.log
-*.tar
-*.tar.gz
+logs/
